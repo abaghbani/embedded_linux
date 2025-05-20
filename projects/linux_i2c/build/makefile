@@ -1,7 +1,6 @@
 
-GNU_INSTALL_ROOT :=  F:/Tools/gnu_toolchain/arm-none-linux-32/arm-gnu-toolchain-13.2.1/bin
-GNU_VERSION := 13.2.1
-GNU_PREFIX := arm-none-linux-gnueabihf
+GNU_VERSION := 14.2.1
+GNU_PREFIX := aarch64-none-linux-gnu
 
 OUTPUT_DIRECTORY := ./_build
 TARGETS := output.elf
@@ -17,18 +16,15 @@ OBJ_FILES := $(addprefix $(OUTPUT_DIRECTORY)/, $(notdir $(SRC_FILES:.c=.o)))
 vpath %.c $(SRC_DIRS)
 
 # Toolchain commands
-CC      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-gcc-$(GNU_VERSION)
-CXX     := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-c++
-AS      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-as
-AR      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-ar -r
-LD      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-ld
-NM      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-nm
-OBJDUMP := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-objdump
-OBJCOPY := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-objcopy
-SIZE    := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-size
-MK      := mkdir
-RM      := rm -rf
-CP      := cp
+CC      := $(GNU_PREFIX)-gcc-$(GNU_VERSION)
+CXX     := $(GNU_PREFIX)-c++
+AS      := $(GNU_PREFIX)-as
+AR      := $(GNU_PREFIX)-ar -r
+LD      := $(GNU_PREFIX)-ld
+NM      := $(GNU_PREFIX)-nm
+OBJDUMP := $(GNU_PREFIX)-objdump
+OBJCOPY := $(GNU_PREFIX)-objcopy
+SIZE    := $(GNU_PREFIX)-size
 
 # C flags
 CFLAGS += -Wall
@@ -54,7 +50,7 @@ LDFLAGS += -pthread
 all: $(OUTPUT_DIRECTORY) $(TARGETS)
 
 $(OUTPUT_DIRECTORY):
-	@if not exist $@/ $(MK) $@
+	@if [ ! -d "$@" ]; then mkdir -p "$@"; fi
 	
 $(TARGETS): $(OBJ_FILES)
 	@echo Building target: $@
@@ -70,10 +66,10 @@ $(OUTPUT_DIRECTORY)/%.o: %.c
 .PHONY: clean, update_output, size
 
 clean:
-	$(RM) $(OUTPUT_DIRECTORY) $(TARGETS)
+	rm -rf $(OUTPUT_DIRECTORY) $(TARGETS)
 
 update_output:
-	$(CP) $(TARGETS) ../$(TARGETS)
+	cp $(TARGETS) ../$(TARGETS)
 
 size: $(TARGETS)
 	@echo Invoking: ARM v7 Linux Print Size
