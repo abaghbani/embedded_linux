@@ -1,40 +1,36 @@
 
-# GNU_INSTALL_ROOT := C:/Users/Akbar/Documents/Tools/gnu_toolchain/gcc-arm-10.3-2021.07-mingw-w64-i686-arm-none-linux-gnueabihf/bin
-# GNU_VERSION := 10.3.1
-# GNU_PREFIX := arm-none-linux-gnueabihf
-GNU_INSTALL_ROOT := C:/Xilinx/SDK/2019.1/gnu/aarch32/nt/gcc-arm-linux-gnueabi/bin
-GNU_VERSION := 8.2.0
-GNU_PREFIX := arm-linux-gnueabihf
+GNU_VERSION := 14.2.1
+GNU_PREFIX := aarch64-none-linux-gnu
 
-PROJ_DIR := ../sources
 OUTPUT_DIRECTORY := ./_build
-TARGETS := sdr.elf
+TARGETS := output.elf
 
-SRC_FILES := $(wildcard $(PROJ_DIR)/*.c)
-# adding manually source files
-# SRC_FILES += $(PROJ_DIR)/main.c
+LIB_DIR := ../../../lib
+SRC_DIRS := ..
+SRC_DIRS += $(LIB_DIR)/gpio
 
-OBJ_FILES := $(SRC_FILES:$(PROJ_DIR)/%.c=$(OUTPUT_DIRECTORY)/%.o)
+INC_FOLDERS := $(LIB_DIR)/gpio/
+
+SRC_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
+OBJ_FILES := $(addprefix $(OUTPUT_DIRECTORY)/, $(notdir $(SRC_FILES:.c=.o)))
+vpath %.c $(SRC_DIRS)
 
 # Toolchain commands
-CC      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-gcc-$(GNU_VERSION)
-CXX     := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-c++
-AS      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-as
-AR      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-ar -r
-LD      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-ld
-NM      := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-nm
-OBJDUMP := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-objdump
-OBJCOPY := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-objcopy
-SIZE    := $(GNU_INSTALL_ROOT)/$(GNU_PREFIX)-size
-MK      := mkdir
-RM      := rm -rf
-CP      := cp
+CC      := $(GNU_PREFIX)-gcc-$(GNU_VERSION)
+CXX     := $(GNU_PREFIX)-c++
+AS      := $(GNU_PREFIX)-as
+AR      := $(GNU_PREFIX)-ar -r
+LD      := $(GNU_PREFIX)-ld
+NM      := $(GNU_PREFIX)-nm
+OBJDUMP := $(GNU_PREFIX)-objdump
+OBJCOPY := $(GNU_PREFIX)-objcopy
+SIZE    := $(GNU_PREFIX)-size
 
 # C flags
 CFLAGS += -Wall
 CFLAGS += -O0
 CFLAGS += -g3
-#CFLAGS += -I "$(SRC_FILES)/include"
+CFLAGS += $(foreach dir, $(INC_FOLDERS), -I$(dir))
 CFLAGS += -c
 CFLAGS += -pthread
 CFLAGS += -fmessage-length=0 
@@ -54,8 +50,8 @@ LDFLAGS += -pthread
 all: $(OUTPUT_DIRECTORY) $(TARGETS)
 
 $(OUTPUT_DIRECTORY):
-	@if not exist $@/ $(MK) $@
-
+	@if [ ! -d "$@" ]; then mkdir -p "$@"; fi
+	
 $(TARGETS): $(OBJ_FILES)
 	@echo Building target: $@
 	@echo Invoking: ARM v7 Linux gcc linker
@@ -63,17 +59,18 @@ $(TARGETS): $(OBJ_FILES)
 	@echo Finished building target: $@
 	@$(SIZE) $@
 
-$(OUTPUT_DIRECTORY)/%.o: $(PROJ_DIR)/%.c
+$(OUTPUT_DIRECTORY)/%.o: %.c
 	@echo 'Compiling file: $<'
 	@$(CC) $(CFLAGS) -o $@ $<
 
 .PHONY: clean, update_output, size
 
 clean:
-	$(RM) $(OUTPUT_DIRECTORY) $(TARGETS)
+	@echo "Removing output folder ..."
+	@rm -rf $(OUTPUT_DIRECTORY) $(TARGETS)
 
 update_output:
-	$(CP) $(TARGETS) ../$(TARGETS)
+	cp $(TARGETS) ../$(TARGETS)
 
 size: $(TARGETS)
 	@echo Invoking: ARM v7 Linux Print Size

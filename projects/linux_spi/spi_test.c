@@ -13,14 +13,18 @@
 
 #include "spi.h"
 
-int spi_test()
+int main()
 {
-	char *device = "/dev/spidev1.1";
-
-	int fd = spi_open(device, 0, 8, 5000000);
-	if (fd < 0)
+	struct SPIDevice device = {
+		.filename = "/dev/spidev1.1",
+		.mode = 0,
+		.bits = 8,
+		.speed = (uint32_t)(5000000)
+	};
+	
+	if(spi_open(&device)==0)
 	{
-		printf("Invalid SPI device file:%s.\n", device);
+		printf("Invalid SPI device file:%s.\n", device.filename);
 		return -1;
 	}
 	else
@@ -31,7 +35,7 @@ int spi_test()
 
 	memset(buff_tx, 0xa6, 10);
 
-	if(spi_transfer(fd, buff_tx, buff_rx, 4)<0)
+	if(spi_transfer(&device, buff_tx, buff_rx, 4)==0)
 	{
 		printf("SPI: failed to transfer\n");
 		return -1;
@@ -39,7 +43,7 @@ int spi_test()
 	else
 		printf("SPI: spi transfer is done successfully.\n");
 
-	spi_close(fd);
+	spi_close(&device);
 
     return 0;
 }

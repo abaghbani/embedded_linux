@@ -30,7 +30,7 @@ SIZE    := $(GNU_PREFIX)-size
 CFLAGS += -Wall
 CFLAGS += -O0
 CFLAGS += -g3
-CFLAGS += -I "$(INC_FOLDERS)"
+CFLAGS += $(foreach dir, $(INC_FOLDERS), -I$(dir))
 CFLAGS += -c
 CFLAGS += -pthread
 CFLAGS += -fmessage-length=0 
@@ -66,7 +66,8 @@ $(OUTPUT_DIRECTORY)/%.o: %.c
 .PHONY: clean, update_output, size
 
 clean:
-	rm -rf $(OUTPUT_DIRECTORY) $(TARGETS)
+	@echo "Removing output folder ..."
+	@rm -rf $(OUTPUT_DIRECTORY) $(TARGETS)
 
 update_output:
 	cp $(TARGETS) ../$(TARGETS)

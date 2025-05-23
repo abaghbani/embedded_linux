@@ -1,7 +1,3 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "axi_switch.h"
 #include "axi_dma.h"
 #include "board.h"

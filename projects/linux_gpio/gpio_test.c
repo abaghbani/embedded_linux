@@ -12,7 +12,7 @@
 
 #include "gpio.h"
 
-int gpio_test()
+int main()
 {
 	GPIO_PIN_DAT gpio_pin;
 
