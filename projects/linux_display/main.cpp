@@ -86,7 +86,8 @@ void HelloWorld(void)
 	myTFT.setCursor(42,60);
 	myTFT.setTextColor(RVLC_GREEN, RVLC_BLACK);
 	myTFT.setFont(font_orla);
-	myTFT.print("Hello world");
+	myTFT.print("Hello Baghbani's");
+	myTFT.print("   Family");
 	delayMilliSecRVL(7000);
 }
 

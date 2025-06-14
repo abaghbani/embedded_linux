@@ -1,6 +1,7 @@
 
 GNU_VERSION := 14.2.1
-GNU_PREFIX := aarch64-none-linux-gnu
+# GNU_PREFIX := aarch64-none-linux-gnu
+GNU_PREFIX := arm-none-linux-gnueabihf
 
 OUTPUT_DIRECTORY := ./_build
 TARGETS := output.elf
@@ -42,23 +43,27 @@ CFLAGS += -g3
 CFLAGS += $(foreach dir, $(INC_FOLDERS), -I$(dir))
 CFLAGS += -c
 CFLAGS += -pthread
-CFLAGS += -fmessage-length=0 
-CFLAGS += -MT"$@" 
-CFLAGS += -MMD 
-CFLAGS += -MP 
-CFLAGS += -MF"$(@:%.o=%.d)" 
-CFLAGS += -MT"$(@)" 
+CFLAGS += -fmessage-length=0
+CFLAGS += -MT"$@"
+CFLAGS += -MMD -MP -MF"$(@:.o=.d)"
 
-CXXFLAGS := $(CFLAGS)
-CXXFLAGS += -c++
-# CXXFLAGS += -std=c++11
+CXXFLAGS += -Wall
+CXXFLAGS += -O0
+CXXFLAGS += -g3
+CXXFLAGS += $(foreach dir, $(INC_FOLDERS), -I$(dir))
+CXXFLAGS += -c
+CXXFLAGS += -pthread
+CXXFLAGS += -fmessage-length=0
+CXXFLAGS += -std=c++17
+CXXFLAGS += -MT"$@"
+CXXFLAGS += -MMD -MP -MF"$(@:.o=.d)"
 
 # Linker flags
 # LDFLAGS += -O3 -g3
 # LDFLAGS += -mthumb -mabi=aapcs -T$(LINKER_SCRIPT)
 # LDFLAGS += -L "M:/home/akbar/sdr_linux/build/tmp/work"
 LDFLAGS += -pthread
-
+LDFLAGS += -static
 
 all: $(OUTPUT_DIRECTORY) $(TARGETS)
 
@@ -68,7 +73,7 @@ $(OUTPUT_DIRECTORY):
 $(TARGETS): $(OBJ_FILES)
 	@echo Building target: $@
 	@echo Invoking: ARM v7 Linux gcc linker
-	@$(CC) -o $@ $^ $(LDFLAGS)
+	@$(CXX) -o $@ $^ $(LDFLAGS)
 	@echo Finished building target: $@
 	@$(SIZE) $@
 

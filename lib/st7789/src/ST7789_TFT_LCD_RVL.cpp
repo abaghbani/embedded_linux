@@ -5,7 +5,7 @@
 	Project Name: DisplayRVL_Lib_RPI
 */
 
-#include "../../include/st7789/ST7789_TFT_LCD_RVL.hpp"
+#include "ST7789_TFT_LCD_RVL.hpp"
 
 // Section:  Defines
 
