@@ -1,7 +1,7 @@
 
 GNU_VERSION := 14.2.1
-GNU_PREFIX := aarch64-none-linux-gnu
-# GNU_PREFIX := arm-none-linux-gnueabihf
+#GNU_PREFIX := aarch64-none-linux-gnu
+GNU_PREFIX := arm-none-linux-gnueabihf
 
 OUTPUT_DIRECTORY := ./_build
 TARGETS := output.elf
@@ -46,7 +46,7 @@ CFLAGS += -MT"$(@)"
 # LDFLAGS += -mthumb -mabi=aapcs -T$(LINKER_SCRIPT)
 # LDFLAGS += -L "M:/home/akbar/sdr_linux/build/tmp/work"
 LDFLAGS += -pthread
-
+LDFLAGS += -static
 
 all: $(OUTPUT_DIRECTORY) $(TARGETS)
 

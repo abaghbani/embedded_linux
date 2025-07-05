@@ -9,7 +9,7 @@ int main()
     struct I2cDevice dev;
 
 	dev.filename = "/dev/i2c-1";
-	dev.addr = 0x30;
+	dev.addr = 0x18; // 7-bit address : 0x18, 8-bit address: 0x30
 
 	if(i2c_start(&dev) < 0)
 	{
