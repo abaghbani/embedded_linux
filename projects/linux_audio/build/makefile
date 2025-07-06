@@ -12,7 +12,7 @@ SRC_DIRS += $(LIB_DIR)/i2c
 SRC_DIRS += $(LIB_DIR)/adc3101
 
 INC_FOLDERS := $(LIB_DIR)/i2c/
-INC_FOLDERS := $(LIB_DIR)/adc3101/
+INC_FOLDERS += $(LIB_DIR)/adc3101/
 
 SRC_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 OBJ_FILES := $(addprefix $(OUTPUT_DIRECTORY)/, $(notdir $(SRC_FILES:.c=.o)))

@@ -21,7 +21,7 @@ int main()
 
 	// Initialize the TLV320ADC3101 codec
 	tlv320adc3101_init(&dev, 48000, 16);
-	printf
+	printf("TLV320ADC3101 initialized with sample rate 48000Hz and 16-bit sample width.\r\n");
 	// Set LED states
 	tlv320adc3101_set_led(&dev, 1, 0); // Turn on LED1,
 

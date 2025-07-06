@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <string.h>
 #include <stdint.h>
 
 #include "i2c.h"
@@ -81,7 +83,7 @@ void tlv320adc3101_init(struct I2cDevice* dev, uint32_t sample_rate, uint8_t sam
     i2c_write_reg(dev, 0x3F, 0xD4); // DAC => I2S
 }
 
-void tlv320adc3101_set_led(struct i2cDevice* dev, uint8_t led1, uint8_t led2) 
+void tlv320adc3101_set_led(struct I2cDevice* dev, uint8_t led1, uint8_t led2) 
 {
     uint8_t reg_value = (led1 ? 0x40 : 0x00)+ (led2 ? 0x10 : 0x00);
     i2c_write_reg(dev, 0x00, 0x01); // Page 1
