@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "i2c.h"
+#include "tlv320adc3101.h"
 
 int main()
 {
@@ -11,16 +12,23 @@ int main()
 	dev.filename = "/dev/i2c-1";
 	dev.addr = 0x18; // 7-bit address : 0x18, 8-bit address: 0x30
 
+
 	if(i2c_start(&dev) < 0)
 	{
 		printf("failed to start i2c device: %x\r\n", dev.addr);
 		return -1;
 	}
 
-	uint8_t buf[10];
-	i2c_write_reg(&dev, 0x01, 0x01);
-	buf[0] = i2c_read_reg(&dev, 0x06);
-	printf("read from i2c device: %x, reg-add: %x, value: %x \r\n", dev.addr, 0x06, buf[0]);
+	// Initialize the TLV320ADC3101 codec
+	tlv320adc3101_init(&dev, 48000, 16);
+	printf
+	// Set LED states
+	tlv320adc3101_set_led(&dev, 1, 0); // Turn on LED1,
+
+	// uint8_t buf[10];
+	// i2c_write_reg(&dev, 0x01, 0x01);
+	// buf[0] = i2c_read_reg(&dev, 0x06);
+	// printf("read from i2c device: %x, reg-add: %x, value: %x \r\n", dev.addr, 0x06, buf[0]);
 
 	i2c_stop(&dev);
 
