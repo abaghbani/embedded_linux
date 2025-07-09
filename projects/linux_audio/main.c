@@ -12,7 +12,7 @@
 int i2s_init() {
     snd_pcm_t *pcm_handle;
     snd_pcm_hw_params_t *params;
-    int rate = 48000;
+    unsigned int rate = 48000;
     int channels = 2;
     snd_pcm_uframes_t frames = 32;
     int rc;

@@ -13,6 +13,7 @@ SRC_DIRS += $(LIB_DIR)/adc3101
 
 INC_FOLDERS := $(LIB_DIR)/i2c/
 INC_FOLDERS += $(LIB_DIR)/adc3101/
+INC_FOLDERS += $(LIB_DIR)/alsa-arm/include/
 
 SRC_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
 OBJ_FILES := $(addprefix $(OUTPUT_DIRECTORY)/, $(notdir $(SRC_FILES:.c=.o)))
@@ -48,7 +49,7 @@ CFLAGS += -MT"$(@)"
 # LDFLAGS += -mthumb -mabi=aapcs -T$(LINKER_SCRIPT)
 # LDFLAGS += -L "M:/home/akbar/sdr_linux/build/tmp/work"
 LDFLAGS += -pthread
-LDFLAGS += -static
+LDFLAGS += -L $(LIB_DIR)/alsa-arm/lib/ -lasound
 
 all: $(OUTPUT_DIRECTORY) $(TARGETS)
 
